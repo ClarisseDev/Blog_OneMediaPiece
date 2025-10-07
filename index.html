@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGE Blog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <div id="header">
+        <h1>Bienvenue sur OneMediaPiece</h1>
+        <div id="loginArea"></div>
+    </div>
+    <div id="main"></div>
+    <div id="footer"></div>
+    
+<!-- Fenêtre modale -->
+    <div id="myModal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalFormContainer"></div>
+        </div>
+    </div>
+
+    <div id="articles" class="div-articles">
+        <div class="article"></div>
+    </div>
+
+    <!-- Lien vers le fichier JavaScript externe -->
+    <script type="module" src="js/script.js"></script>
+    <script>
+        // Appel de la fonction accueil après le chargement du fichier script.js
+        document.addEventListener('DOMContentLoaded', () => {
+            accueil();
+        });
+    </script>
+</body>
+</html>
