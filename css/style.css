@@ -1,66 +1,300 @@
-.modal 
-{
-    display: none; 
-    position: fixed; 
-    z-index: 1; 
-    left: 0;
-    top: 0;
-    width: 100%;
+/* ----------------------------- */
+/*      CHARTE GRAPHIQUE         */
+/* ----------------------------- */
+
+:root {
+    --main-bg: #f4f4f4;
+    --header-bg: #e0e1e3;
+    --primary-color: #3b82f6;   /* bleu doux */
+    --success-color: #4caf50;   /* vert doux */
+    --hover-dark: #2e6bcf;
+    --text-dark: #333;
+    --text-light: #fff;
+    --shadow: 0 2px 6px rgba(0,0,0,0.15);
+    --radius: 8px;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
     height: 100%;
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-    padding-top: 60px;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-bg);
+    color: var(--text-dark);
 }
-.modal-content 
-{
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-.close 
-{
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-.close:hover,
-.close:focus 
-{
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-#buttonLog 
-{
-    display: inline-block;
-    background-color: rgb(96, 155, 213);
-    padding: 0.5rem;
-    border-radius: 5%;
-    margin: 2rem;
-}
-#buttonRegister 
-{
-    display: inline-block;
-    background-color: rgb(99, 165, 104);
-    padding: 0.5rem;
-    border-radius: 5%;
-    margin: 2rem;
-}
-#buttonLog:hover, 
-#buttonRegister:hover
-{
-    scale: 1.1;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 5px 5px 5px rgb(83, 82, 82);
-}
-#header
-{
+
+/* ----------------------------- */
+/*           HEADER              */
+/* ----------------------------- */
+
+#header {
     display: flex;
-    justify-content: space-around;
-    background-color: rgb(224 225 227);
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--header-bg);
+    height: 100px;
+    padding: 0 2rem;
+    box-shadow: var(--shadow);
+}
+
+#header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* ----------------------------- */
+/*     ZONE DE CONNEXION         */
+/* ----------------------------- */
+
+#myLoginArea {
+    display: flex;
+    align-items: center;
+}
+
+#loginArea {
+    display: flex;
+    flex-direction: row; /* boutons côte à côte */
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ----------------------------- */
+/*            BOUTONS            */
+/* ----------------------------- */
+
+.buttonClass {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
+}
+
+.buttonClass:hover {
+    background-color: var(--hover-dark);
+    transform: scale(1.05);
+}
+
+#buttonLog {
+    background-color: var(--primary-color);
+}
+
+#buttonRegister {
+    background-color: var(--success-color);
+}
+
+/* ----------------------------- */
+/*             MAIN              */
+/* ----------------------------- */
+
+#main {
+    padding: 2rem;
+}
+
+#featuredPosts h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.div-articles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.article {
+    background-color: #fff;
+    border-radius: var(--radius);
+    padding: 1rem;
+    width: 300px;
+    box-shadow: var(--shadow);
+}
+
+/* ----------------------------- */
+/*            MODALE             */
+/* ----------------------------- */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    inset: 0; /* équivaut à top:0; left:0; right:0; bottom:0 */
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--text-dark);
+}
+
+/* ----------------------------- */
+/*           TEXTES              */
+/* ----------------------------- */
+
+.textCenter {
+    text-align: center;
+}
+
+.textRed {
+    color: crimson;
+}
+
+.modalTitle {
+    margin-bottom: 1.5rem;
+}
+
+.formWidth200px {
+    width: 200px;
+}
+
+/* ----------------------------- */
+/*          FORMULAIRE           */
+/* ----------------------------- */
+
+.verticalizeCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ----------------------------- */
+/*           ARTICLES            */
+/* ----------------------------- */
+.articles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.article-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 1rem;
+    width: 300px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.article-card h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.article-card small {
+    display: block;
+    margin-top: 0.8rem;
+    color: #666;
+    font-style: italic;
+}
+
+
+/* ----------------------------- */
+/*       MEDIA QUERIES            */
+/* ----------------------------- */
+
+/* Mobile (jusqu'à 767px) */
+@media (max-width: 767px) {
+    :root {
+        --radius: 6px; /* coins légèrement moins arrondis */
+    }
+
+    #header {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    #header h1 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    #loginArea {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .buttonClass {
+        width: 100%;
+        padding: 0.8rem;
+    }
+
+    #main {
+        padding: 1rem;
+    }
+
+    .div-articles, .articles-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .article, .article-card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+}
+
+/* Tablette (768px à 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    #header {
+        height: 80px;
+    }
+
+    #header h1 {
+        font-size: 1.6rem;
+    }
+
+    .article, .article-card {
+        width: calc(50% - 1rem); /* 2 articles par ligne */
+    }
+
+    .modal-content {
+        width: 85%;
+    }
+}
+
+/* Desktop (à partir de 1024px) */
+@media (min-width: 1024px) {
+    /* Styles par défaut déjà adaptés pour desktop */
+    .article, .article-card {
+        width: 300px; /* 3 articles par ligne si espace suffisant */
+    }
 }

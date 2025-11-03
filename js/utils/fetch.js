@@ -33,6 +33,7 @@ const defaultErrorCallback = function(error) {
     console.error('Erreur:', error);
 }
 
+// Fonction de fetch personnalisée
 export function myFetch(formData, dataCallback, url, method, errorCallback = null, responseCallback = null, contentType = 'application/x-www-form-urlencoded') {
     fetch(url, {
         method: method,
@@ -44,3 +45,35 @@ export function myFetch(formData, dataCallback, url, method, errorCallback = nul
     .catch(error => (errorCallback == null ? defaultErrorCallback(error): errorCallback(error) ));
 }
 
+// Fonction de fetch asynchrone personnalisée
+export async function asyncFetchData(formData, { url = "api.php", method = "GET", errorCallback = null, responseCallback = null, contentType = 'application/x-www-form-urlencoded',
+    container = null, errorLabel = null
+ } = {} ) {
+    let sendUrl = url;
+    let sendBody = null;
+    if (method == 'GET' || method == 'DELETE') { // DELETE et GET n'ont pas de body, les paramètres passent dans l'URL
+        sendUrl = url + "?" + new URLSearchParams(formData).toString();
+    } else {
+        sendBody = new URLSearchParams(formData).toString();
+    }
+    const response = await fetch(sendUrl, {
+        method: method,
+        headers: { 'Content-Type': contentType },
+        body: sendBody  
+    });
+    if ( ! response.ok) {  // Vérifie si la réponse est réussie (status 2xx)
+        try {
+            await manageNotOk(response);
+        } catch (ex) {
+            defaultFormErrorCallback(ex, container, errorLabel);
+        }
+        throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+}
+
+export function formFetch(form, dataCallback, { errorCallback = null, responseCallback = null } = {} ) { 
+    myFetch(new FormData(form), dataCallback, 
+        { url : form.action, method : form.method, errorCallback : errorCallback, responseCallback : responseCallback, contentType : form.enctype } );
+}

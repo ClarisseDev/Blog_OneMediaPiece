@@ -1,7 +1,7 @@
 <?php
 
-	namespace Timepast\utils\database;
-use Timepast\exceptions\HttpStatusException;
+	namespace OneMediaPiece_blog\utils;
+use OneMediaPiece_blog\exceptions\HttpStatusException;
 use PDO;
 use PDOException;
 

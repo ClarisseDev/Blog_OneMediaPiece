@@ -6,7 +6,7 @@ use OneMediaPiece_blog\utils\controller\AbstractController;
 use OneMediaPiece_blog\utils\Functions;
 use OneMediaPiece_blog\utils\controller\IController;
 use OneMediaPiece_blog\utils\SessionManager;
-use stdClass;
+use OneMediaPiece_blog\model\Compte;
 
 
 class SessionGetController extends AbstractController implements IController
@@ -36,7 +36,7 @@ class SessionGetController extends AbstractController implements IController
 				$state['info'] = [
 					"pseudo" => $compte->getPseudo(),
 					"role" => $compte->getRole()->getLabel(),
-					"roleId" => $compte->getRole()->getPrimaryKey()
+					"roleId" => $compte->getRole()->getIdRole()
 				];
 			}
 			$this->response = $state;
