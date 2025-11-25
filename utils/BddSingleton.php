@@ -20,7 +20,7 @@ use PDOException;
 		private function __construct() 
 		{
 			// TODO : coller les param de connexion bdd dans un fichier puis include
-			$DSN = "mysql:host=localhost;port=3306;dbname=timepast";
+			$DSN = "mysql:host=localhost;port=3306;dbname=onemediapiece";
 			try 
 			{
 				// $this->pdo = new PDO($DSN, 'bge_blog_nrb', 'azerty-12');

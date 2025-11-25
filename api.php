@@ -2,6 +2,9 @@
 
 namespace OneMediaPiece_blog;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 define('ROOT', __DIR__);
 require_once ROOT . '/utils/Server.php';
 \OneMediaPiece_blog\utils\Server::bootstrap();

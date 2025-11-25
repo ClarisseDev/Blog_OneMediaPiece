@@ -3,6 +3,7 @@ namespace OneMediaPiece_blog\model;
 use DateTime;
 use OneMediaPiece_blog\utils\entity\IEntity;
 use OneMediaPiece_blog\utils\entity\AbstractEntity;
+use OneMediaPiece_blog\model\Compte;
 
 class Article extends AbstractEntity implements IEntity 
 {
@@ -16,9 +17,9 @@ class Article extends AbstractEntity implements IEntity
 	private bool $estSupprime;
 
 	private Compte $auteur;
-	private Compte $moderateur;
-	private DateTime $dateModeration;
-	private string $motifModeration;
+	private ?Compte $moderateur = null;
+	private ?DateTime $dateModeration = null;
+	private string $motifModeration = '';
 
 	public function __construct() { /* RAS */ }
 

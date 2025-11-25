@@ -16,6 +16,7 @@ function manageSession(sessionInfo) {
     } else {
         console.log("Utilisateur non connecté");
         setupAuthButtons();
+        buildAccueil();
     }
 };
 

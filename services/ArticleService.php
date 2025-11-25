@@ -29,12 +29,6 @@ class ArticleService extends AbstractService implements IService
     }
 
     // CREATE
-    function isValidCredential(Article $article) : ?int
-    {
-        return $this->dao->isValidCredential($article);
-    }
-
-
     function insert(IEntity $entity): int
     {
         /** @var Article $entity */
@@ -76,7 +70,7 @@ class ArticleService extends AbstractService implements IService
     }
 
 
-    // RETREIVE
+    // READ
     function findById(int $id): IEntity {
         // Récupérer le rôle et l'ID du compte depuis la session
         $roleSession = SessionManager::getRoleIdFromSession();
@@ -106,28 +100,30 @@ class ArticleService extends AbstractService implements IService
 
     function findAll(): array
     {
-        $roleSession = SessionManager::getRoleIdFromSession();
-        $compteSession = SessionManager::getCompteIdFromSession();
-
-        if (!$compteSession) {
-            return $this->dao->findAllPublic();
-        }
-
-        // Si l'utilisateur est un admin ou un modo, il peut voir tous les articles
-        if ($roleSession >= 2) {
-            return $this->getDao()->findAll();
-        } else {
-            // Sinon, il ne voit que ses propres articles ou les articles publics
-            $allArticles = $this->getDao()->findAll();
-            $filteredArticles = [];
-            foreach ($allArticles as $article) {
-                if ($article instanceof Article) {
-                    if ($article->getEstPublic() || $article->getAuteur()->getIdCompte() == $compteSession) {
-                        $filteredArticles[] = $article;
+        try {
+            $roleSession = SessionManager::getRoleIdFromSession();
+            $compteSession = SessionManager::getCompteIdFromSession();
+            if (!$compteSession) {
+                return $this->dao->findAllPublic();
+            }
+            if ($roleSession >= 2) {
+                return $this->getDao()->findAll();
+            } else {
+                $allArticles = $this->getDao()->findAll();
+                $filteredArticles = [];
+                foreach ($allArticles as $article) {
+                    if ($article instanceof Article) {
+                        if ($article->getEstPublic() || $article->getAuteur()->getIdCompte() == $compteSession) {
+                            $filteredArticles[] = $article;
+                        }
                     }
                 }
+                return $filteredArticles;
             }
-            return $filteredArticles;
+        } catch (HttpStatusException $e) {
+            // Log l'erreur et retourne un tableau vide
+            error_log("Error in ArticleService::findAll: " . $e->getMessage());
+            return [];
         }
     }
 

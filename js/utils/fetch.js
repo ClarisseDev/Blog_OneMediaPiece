@@ -1,5 +1,11 @@
 import { AuthenticationException } from './exceptions.js';
 
+async function manageNotOk(response) {
+    const error = await response.text();
+    console.error('Erreur serveur :', error);
+    throw new Error(`Erreur HTTP : ${response.status} - ${error}`);
+}
+
 const defaultResponseCallback = function(response) {
     if (!response.ok) {
         console.log("Status Text : " + response.statusText + " || code : " + response.status);
@@ -65,7 +71,8 @@ export async function asyncFetchData(formData, { url = "api.php", method = "GET"
         try {
             await manageNotOk(response);
         } catch (ex) {
-            defaultFormErrorCallback(ex, container, errorLabel);
+            // defaultFormErrorCallback(ex, container, errorLabel);
+            console.error('Erreur fetch:', ex);
         }
         throw new Error(`Erreur HTTP : ${response.status}`);
     }

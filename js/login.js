@@ -66,18 +66,24 @@ export function displayRegistrationForm() {
         const submitButton = createButton("submit", "Créer un compte");
         form.appendChild(submitButton);
 
-        form.addEventListener("submit", function(event) {
-            event.preventDefault();
-            formFetch(form, function(data) {
-                if (data === 0) { // Échec de l'inscription
-                    const errorLabel = createH5("Erreur lors de l'inscription", { classes: "textCenter modalTitle textRed" });
-                    form.appendChild(errorLabel);
-                } else {
-                    cleanAndCloseModal();
-                    buildAccueil();
-                }
-            });
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        formFetch(form, function(data) {
+            if (data.error) { // gestion affichage des erreurs
+                const errorLabel = createH5(data.error, { classes: "textCenter modalTitle textRed" });
+                form.appendChild(errorLabel);
+            } else {
+                cleanAndCloseModal();
+                alert("Compte créé avec succès !");
+                buildAccueil();
+            }
+        }, {
+            errorCallback: (error) => {
+                const errorLabel = createH5(error.message, { classes: "textCenter modalTitle textRed" });
+                form.appendChild(errorLabel);
+            }
         });
+    });
 
         container.appendChild(form);
     });

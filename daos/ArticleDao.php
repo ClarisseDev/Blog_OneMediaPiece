@@ -2,6 +2,7 @@
 namespace OneMediaPiece_blog\daos;
 use OneMediaPiece_blog\exceptions\HttpStatusException;
 use OneMediaPiece_blog\model\Article;
+use OneMediaPiece_blog\model\Compte;
 use OneMediaPiece_blog\daos\CompteDao;
 use OneMediaPiece_blog\model\Role;
 use OneMediaPiece_blog\utils\dao\AbstractDao;
@@ -122,64 +123,15 @@ class ArticleDao extends AbstractDao implements IDao
         }
     }
 
-    // RETREIVE
-    function isValidCredential($article) : ?int
-    {
-        throw new Exception ("Not implemented " . __CLASS__ . " " . __FUNCTION__ . " " . __LINE__);
-        /** @var Article $article */
-        // Connexion à la BDD
-        $pdo = BddSingleton::getInstance()->getPdo();
-        // Requête SQL
-        $sql = "SELECT id_article FROM " . $this->getTableName() . " WHERE login = :login AND estSupprime = false";
-        // Préparer la requête SQL
-        $stmt = $pdo->prepare($sql);
-        // Paramètres obligatoires
-        $stmt->bindValue(":login", $article->getLogin(), PDO::PARAM_STR);
-        try
-        {
-            // Exécuter et vérifier l'exécution de la requête
-            if(!$stmt->execute())
-            {
-                throw new HttpStatusException("Failed to execute select query for login : " . $article->getLogin() . " " . __CLASS__  . " " . __FUNCTION__ . " " . __LINE__, 500);
-            }
-            // Récupérer le tuple
-            $row = $stmt->fetch(PDO::FETCH_OBJ);
-            if($row === false)
-            {
-                // Pas de compte avec ce login
-                return null;
-            }
-            // Vérifier le mot de passe
-            if( password_verify( $article->getPassword(), $row->password) )
-            {
-                // Mot de passe OK, retourner l'id du compte
-                return intval($row->id_article);
-            }
-            else
-            {
-                // Mauvais mot de passe
-                return null;
-            }
-        } 
-        catch (PDOException $ex) 
-        {
-            // Log détaillé pour le débogage
-            error_log("SQL Error: " . $ex->getMessage() . " | Query: " . $sql . " | Parameters: " . json_encode([
-                ":login" => $article->getLogin()
-            ]));
-
-            // Lever une exception HTTP avec un message clair
-            throw new HttpStatusException("Database select failed for login: " . $article->getLogin(), 500, $ex);
-        }
-    }
-
+    // READ
+    // Récupérer l'article par son id
     function findById(int $id): IEntity
     {
         // si l'utilisateur est l'auteur ou un admin ou un modérateur, il peut voir l'article même s'il n'est pas public
         // connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // requête SQL
-        $sql = "SELECT * FROM " . $this->getTableName() . " WHERE " . $this->getPrimaryKeyName() . " = :id AND estSupprime = false";
+        $sql = "SELECT * FROM article WHERE id_article = :id AND estSupprime = false";
         // préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         // paramètres obligatoires
@@ -212,12 +164,13 @@ class ArticleDao extends AbstractDao implements IDao
         }
     }
 
+    // Récupérer l'article public par son id
     function findByIdPublic (int $id): ?IEntity
     {
         // Connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // Requête SQL
-        $sql = "SELECT * FROM " . $this->getTableName() . " WHERE " . $this->getPrimaryKeyName() . " = :id AND estPublic = true AND estSupprime = false";
+        $sql = "SELECT * FROM article WHERE id_article = :id AND estPublic = true AND estSupprime = false";
         // Préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         // Paramètres obligatoires
@@ -250,13 +203,14 @@ class ArticleDao extends AbstractDao implements IDao
         }
     }
 
+    // Récupérer tous les articles
     function findAll()
     {
         // si l'utilisateur est l'auteur ou un admin ou un modérateur, il peut voir tous les articles même s'ils ne sont pas publics
         // Connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // Requête SQL
-        $sql = "SELECT * FROM " . $this->getTableName() . " WHERE estSupprime = false ORDER BY dateCreation DESC";
+        $sql = "SELECT * FROM article WHERE estSupprime = false ORDER BY dateCreation DESC";
         // Préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         try
@@ -284,12 +238,13 @@ class ArticleDao extends AbstractDao implements IDao
         }
     }
 
+    // Récupérer tous les articles publics
     function findAllPublic(): array
     {
         // Connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // Requête SQL
-        $sql = "SELECT * FROM " . $this->getTableName() . " WHERE estPublic = true AND estSupprime = false ORDER BY dateCreation DESC";
+        $sql = "SELECT * FROM article WHERE estPublic = true AND estSupprime = false AND enAttenteDeModeration = false ORDER BY dateCreation DESC";
         // Préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         try {
@@ -311,12 +266,13 @@ class ArticleDao extends AbstractDao implements IDao
         }
     }
 
+    // Récupérer tous les articles d'un auteur
     function findAllByAuthor(int $authorId) : array
     {
         // Connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // Requête SQL
-        $sql = "SELECT * FROM " . $this->getTableName() . " WHERE fk_auteur = :authorId AND estSupprime = false ORDER BY dateCreation DESC";
+        $sql = "SELECT * FROM article WHERE fk_auteur = :authorId AND estSupprime = false ORDER BY dateCreation DESC";
         // Préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         // Paramètres obligatoires
@@ -356,7 +312,7 @@ class ArticleDao extends AbstractDao implements IDao
         }
 
         $pdo = BddSingleton::getInstance()->getPdo();
-        $sql = "UPDATE " . $this->getTableName() . "
+        $sql = "UPDATE article
                 SET titre = :titre,
                     contenu = :contenu,
                     dateModification = :dModif,
@@ -399,7 +355,7 @@ class ArticleDao extends AbstractDao implements IDao
         // Connexion à la BDD
         $pdo = BddSingleton::getInstance()->getPdo();
         // Requête SQL
-        $sql = "DELETE FROM " . $this->getTableName() . " WHERE id_article = :id";
+        $sql = "DELETE FROM article WHERE id_article = :id";
         // Préparer la requête SQL
         $stmt = $pdo->prepare($sql);
         // Paramètre obligatoire

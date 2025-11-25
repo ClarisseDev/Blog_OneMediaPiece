@@ -6,7 +6,7 @@ use OneMediaPiece_blog\utils\entity\AbstractEntity;
 	class Role extends AbstractEntity implements IEntity 
     {
 		private int $idRole;
-		private string $label;
+		private string $label = '';
         
 		function __contruct() { /* RAS */ }
 

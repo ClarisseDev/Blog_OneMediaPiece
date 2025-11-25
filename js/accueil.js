@@ -7,8 +7,11 @@ export async function buildAccueil() {
 
     try {
         // Appel à ton contrôleur via l’API
-        const formData = { route: 'ArticlesAllGet' };
+        const formData = { route: 'ArticlesAll' };
         const articles = await asyncFetchData(formData, { url: 'api.php', method: 'GET' });
+
+        // Debug : afficher la réponse brute
+        // console.log("Réponse brute de l'API :", articles);
 
         // Si aucun article n’est trouvé
         if (!articles || articles.length === 0) {
@@ -38,8 +41,8 @@ export async function buildAccueil() {
 
             // Auteur + date
             const meta = document.createElement('small');
-            const date = new Date(article.date_creation).toLocaleDateString('fr-FR');
-            meta.textContent = `Publié par ${article.auteur || 'Anonyme'} le ${date}`;
+            const date = new Date(article.dateCreation.date).toLocaleDateString('fr-FR');
+            meta.textContent = `Publié par ${article.auteur.pseudo || 'Anonyme'} le ${date}`;
             articleDiv.appendChild(meta);
 
             container.appendChild(articleDiv);
@@ -49,6 +52,6 @@ export async function buildAccueil() {
 
     } catch (error) {
         console.error('Erreur lors du chargement des articles :', error);
-        featuredPosts.innerHTML += '<p class="textRed">Impossible de charger les articles.</p>';
+        featuredPosts.innerHTML += '<p class="textRed">Impossible de charger les articles</p>';
     }
 }
